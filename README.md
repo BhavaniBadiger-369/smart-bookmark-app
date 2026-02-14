@@ -8,11 +8,14 @@ Users can log in using Google OAuth, add private bookmarks, delete them, and see
 
 ## 🚀 Live Demo
 
+## 🚀 Live Demo
+
 Vercel URL:  
-👉 [Add your deployed link here]
+👉 https://smart-bookmark-app-sepia.vercel.app
 
 GitHub Repository:  
-👉 [Add your GitHub repo link here]
+👉 https://github.com/BhavaniBadiger-369/smart-bookmark-app
+
 
 ---
 
