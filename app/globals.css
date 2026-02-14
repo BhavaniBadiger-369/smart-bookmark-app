@@ -24,3 +24,46 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@keyframes float1 {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes float2 {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(15px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes float3 {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-25px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes float4 {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(18px); }
+  100% { transform: translateY(0); }
+}
+
+/* Very slow ambient background blobs */
+@keyframes slowZoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* Smooth premium badge zoom */
+@keyframes badgeZoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-float1 { animation: float1 6s ease-in-out infinite; }
+.animate-float2 { animation: float2 7s ease-in-out infinite; }
+.animate-float3 { animation: float3 8s ease-in-out infinite; }
+.animate-float4 { animation: float4 9s ease-in-out infinite; }
+
+.animate-slowZoom { animation: slowZoom 40s ease-in-out infinite; }
+.animate-badgeZoom { animation: badgeZoom 50s ease-in-out infinite; }
