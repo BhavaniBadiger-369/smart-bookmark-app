@@ -8,8 +8,6 @@ Users can log in using Google OAuth, add private bookmarks, delete them, and see
 
 ## 🚀 Live Demo
 
-## 🚀 Live Demo
-
 Vercel URL:  
 👉 https://smart-bookmark-app-sepia.vercel.app
 
@@ -177,3 +175,8 @@ The following environment variables are required:
 
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+## Author
+
+**Bhavani Badiger** — Software Developer 
+[GitHub](https://github.com/BhavaniBadiger-369) · [LinkedIn](https://www.linkedin.com/in/bhavani-laxmikant-badiger-7a0902267/)
