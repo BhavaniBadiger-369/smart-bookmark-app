@@ -8,14 +8,12 @@ Users can log in using Google OAuth, add private bookmarks, delete them, and see
 
 ## 🚀 Live Demo
 
-Vercel URL:  
+Vercel URL:
 👉 https://smart-bookmark-app-sepia.vercel.app
 
-GitHub Repository:  
+GitHub Repository:
 👉 https://github.com/BhavaniBadiger-369/smart-bookmark-app
 
-
----
 
 ## 🛠 Tech Stack
 
@@ -33,7 +31,7 @@ GitHub Repository:
 
 ## ✨ Features
 
-- 🔐 Google OAuth login (no email/password)
+- 🔐 Google OAuth login (no email/password required)
 - 🔒 Bookmarks are private to each user
 - ➕ Add bookmark (title + URL)
 - ❌ Delete bookmark with confirmation modal
@@ -51,8 +49,8 @@ GitHub Repository:
 3. After authentication:
    - The app fetches bookmarks belonging to that user.
 4. When a bookmark is added or deleted:
-   - Database updates
-   - Realtime subscription updates all open tabs
+   - Database updates immediately.
+   - Realtime subscription updates all open tabs.
 5. Row Level Security ensures users only access their own data.
 
 ---
@@ -61,13 +59,13 @@ GitHub Repository:
 
 ### Table: `bookmarks`
 
-| Column      | Type      | Description |
-|-------------|-----------|-------------|
-| id          | uuid      | Primary key |
-| title       | text      | Bookmark title |
-| url         | text      | Bookmark URL |
-| user_id     | uuid      | Foreign key (auth.users) |
-| created_at  | timestamp | Auto timestamp |
+| Column     | Type      | Description                  |
+|------------|-----------|------------------------------|
+| id         | uuid      | Primary key                  |
+| title      | text      | Bookmark title               |
+| url        | text      | Bookmark URL                 |
+| user_id    | uuid      | Foreign key (auth.users)     |
+| created_at | timestamp | Auto timestamp               |
 
 ---
 
@@ -76,7 +74,6 @@ GitHub Repository:
 RLS is enabled on the `bookmarks` table.
 
 Policies:
-
 - Users can SELECT only their own bookmarks
 - Users can INSERT only their own bookmarks
 - Users can DELETE only their own bookmarks
@@ -85,96 +82,131 @@ Policy condition used:
 
 ```sql
 auth.uid() = user_id
+```
 
-⚡ Real-Time Implementation
+---
+
+## ⚡ Real-Time Implementation
 
 Supabase Realtime is used to listen for database changes:
+
+```js
 supabase
   .channel('realtime-bookmarks')
   .on('postgres_changes', ...)
+```
 
 This allows:
+- Instant UI updates after add/delete
+- Multi-tab synchronization
+- No page refresh required
 
-Instant UI updates after add/delete
+---
 
-Multi-tab synchronization
+## 🧩 Problems Faced & Solutions
 
-No page refresh required
+### 1️⃣ First-time Add/Delete Not Updating Immediately
 
-🧩 Problems Faced & Solutions
-1️⃣ First-time Add/Delete Not Updating Immediately
-
-Issue:
+**Issue:**
 On first login with a new Google account, the first bookmark mutation did not immediately reflect in the UI.
 
-Cause:
+**Cause:**
 Realtime subscription was not fully established before the first database mutation occurred.
 
-Solution:
+**Solution:**
 After successful insert/delete, the app explicitly refetches bookmarks to guarantee UI consistency:
+
+```js
 await fetchBookmarks(user.id)
+```
 
-This ensures reliable updates even if realtime subscription initializes slightly later.
+This ensures reliable updates even if the realtime subscription initializes slightly later.
 
-2️⃣ Logout Not Syncing Across Tabs
+---
 
-Issue:
+### 2️⃣ Logout Not Syncing Across Tabs
+
+**Issue:**
 Logging out in one tab did not automatically log out other open tabs.
 
-Solution:
+**Solution:**
 Added an auth state listener:
+
+```js
 supabase.auth.onAuthStateChange(...)
+```
 
 When session becomes null, the app redirects to the login page in all open tabs.
 
-3️⃣ Understanding Row Level Security (RLS)
+---
 
-Initially, it was unclear how auth.uid() worked in Supabase policies.
+### 3️⃣ Understanding Row Level Security (RLS)
+
+Initially, it was unclear how `auth.uid()` worked in Supabase policies.
 
 After understanding that:
-
-auth.uid() returns the authenticated user’s UUID
-
-Matching it against user_id enforces per-user isolation
+- `auth.uid()` returns the authenticated user's UUID
+- Matching it against `user_id` enforces per-user data isolation
 
 RLS was properly configured to ensure strict data security.
 
-4️⃣ Responsive Layout Adjustments
+---
+
+### 4️⃣ Responsive Layout Adjustments
 
 The layout initially required refinement for mobile and tablet screens.
 
-Tailwind responsive breakpoints (sm, md) were used to adjust:
-
-Header alignment
-
-Button widths
-
-Input stacking
-
-Modal sizing
+Tailwind responsive breakpoints (`sm`, `md`) were used to adjust:
+- Header alignment
+- Button widths
+- Input stacking
+- Modal sizing
 
 The final UI works across mobile, tablet, and desktop.
 
-🧪 Testing Scenarios Covered
+---
 
-Multiple tabs open simultaneously
+## 🧪 Testing Scenarios Covered
 
-Add/delete across tabs
+- Multiple tabs open simultaneously
+- Add/delete across tabs
+- Logout sync across tabs
+- Fresh Google account login
+- Mobile responsiveness
+- Normal vs incognito browser behavior
 
-Logout sync across tabs
+---
 
-Fresh Google account login
+## 🔧 Environment Variables
 
-Mobile responsiveness
+Create a `.env.local` file in the root of the project with the following:
 
-Normal vs incognito browser behavior
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-🔧 Environment Variables
+---
 
-The following environment variables are required:
+## 🚀 Running Locally
 
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```bash
+# Clone the repository
+git clone https://github.com/BhavaniBadiger-369/smart-bookmark-app
+
+# Install dependencies
+npm install
+
+# Add environment variables
+# Create .env.local and add your Supabase keys
+
+# Start the development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
 
 ## Author
 
